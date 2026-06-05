@@ -529,20 +529,21 @@ footer .sep{color:var(--faint);}
     </div>
     <div class="reading">
       <p>说白了,自动化就是把上面那步「人来改」换成「机器自己改」。先看它<strong>真能不能</strong>自己改 —— 把 v1 和它那次时区失败的记录丢给模型,让它自己诊断、自己提改进:</p>
-      <details style="background:var(--surface);border:1px solid var(--line);border-radius:11px;margin:14px 0;">
-        <summary style="cursor:pointer;padding:14px 18px;font-size:15px;color:var(--fg);font-weight:600;">展开:模型自己的反思(真实输出,未改写)</summary>
-        <div style="padding:0 18px 16px;">
-          <p style="font:600 12px/1 var(--mono);color:var(--muted);margin:14px 0 7px;">它自己诊断出的问题</p>
-          <pre><code>· 规则「不要假设是代码问题」,把「时区」当成代码逻辑压住了;
-· 用户已说「鉴权正常」,它仍按 1→5 线性走,没有分流;
-· 「本地正常、生产异常」这条强线索,清单完全没利用。</code></pre>
-          <p style="font:600 12px/1 var(--mono);color:var(--muted);margin:16px 0 7px;">它自己提的改进</p>
-          <pre><code>① 加「快速分流」:本地 / 生产不一致 → 优先查时区、环境;
-② 「查缓存」加适用判断:数据按时间规律偏移 → 指向时区,不是缓存;
-③ 改排除规则:时区 / 日期边界算环境因素,不受「别假设代码问题」限制。</code></pre>
-        </div>
-      </details>
-      <div class="key" style="margin-bottom:22px;">没人教,它自己就诊断出「时区被规则压住了、缺分流判断」,还自己提出「加分流 / 边界」 —— 和我们手动改的 v2 几乎是同一件事,甚至更细。这就是 GEPA 在做的:<b>读失败、自己改</b>。下面三种框架,只是把它系统化、自动跑起来的不同路子:</div>
+      <div style="background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 11px 11px 0;padding:18px 22px;margin:14px 0;">
+        <p style="font:600 12px/1 var(--mono);color:var(--accent);margin:0 0 10px;">它的思考(真实推理,未改写)</p>
+        <p style="margin:0;font-size:15px;line-height:1.66;color:var(--ink);">先抓到关键信号:<strong>不带 skill 答对、带了反而错</strong> → 问题出在 skill,不在模型。通读后定位两处元凶:① 五步清单里根本没有「时区」这一类,模型无处安放它;② 最后那句「不要假设是代码问题」,把时区这种环境配置问题也一起堵死了 —— 而「本地正常、线上异常」明明是环境差异的强信号,清单却没利用。</p>
+      </div>
+      <p style="font-size:15px;color:var(--muted);margin:18px 0 8px;">于是它给出两条「原文 → 改为」的具体改动:</p>
+      <div style="overflow-x:auto;border:1px solid var(--line);border-radius:11px;margin:0 0 14px;">
+        <table class="cmpt tw">
+          <thead><tr><th>原文(v1)</th><th>它改成</th></tr></thead>
+          <tbody>
+            <tr><td>1. 查参数 2. 查鉴权 3. 查缓存……(五步,没有时区)</td><td>步骤 1「查参数」<strong>加上「含时区 / date 边界」</strong> —— 时区算参数错的一种,挂步骤 1 不破坏顺序、又有了锚点</td></tr>
+            <tr><td>不要假设是业务代码逻辑问题</td><td>加一条例外:<strong>本地正常、线上异常 → 优先怀疑环境配置(时区 / locale)</strong>,这不算业务逻辑</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="key" style="margin-bottom:22px;">它自己推理出问题、给出能直接落地的改动。有意思的是 —— 它的改法和我们手动的 v2 <b>思路还不一样</b>:它在五步框架内打补丁(给步骤 1 加时区、给规则开例外),我们手动是整个换成判断维度。<b>两条路都把时区救了回来。</b>这就是 GEPA 在做的:读失败、自己想、自己改。下面三种框架,只是把它系统化、自动跑起来的不同路子:</div>
       <div class="evos" style="grid-template-columns:1fr;">
         <div class="evo">
           <h4 style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">GEPA <span>反思式进化</span> <a href="https://github.com/gepa-ai/gepa" target="_blank" rel="noopener" style="margin-left:auto;font:600 12px/1 var(--mono);color:var(--accent);white-space:nowrap;">gepa-ai/gepa ↗</a></h4>
