@@ -198,17 +198,14 @@ footer .sep{color:var(--faint);}
       <span class="tag">重点 · 很多人没点开过</span>
       <h2>手动调优:给 skill 写测试,带 / 不带各跑一遍</h2>
       <p>生成完别急着用。skill-creator 内置了一套<strong>评估驱动</strong>的调优流程:给 skill 写几个真实测试用例,每个用例跑两遍 —— 一遍带这个 skill、一遍不带作对照,自动打分,再生成页面让你逐个对比真实输出。</p>
-      <p>我们拿一个真实例子贯穿全程:<code>debug-playbook</code> —— 一套「接口故障排查清单」的 skill。先看它的全文(它有两个版本,后面会解释为什么):</p>
+      <p>我们拿一个真实例子贯穿全程:<code>debug-playbook</code> —— 一套「接口故障排查清单」的 skill。先看它<strong>初版(v1)</strong>的全文 —— 看着挺专业,问题就藏在最后那句「优先在这五类里定位」:</p>
     </div>
 
     <div class="viewer">
       <div class="head">
         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
         <span class="fname">debug-playbook / SKILL.md</span>
-        <div class="vtabs" role="tablist" aria-label="skill 版本">
-          <button class="on" role="tab" aria-selected="true" onclick="showSkill(0,this)">v1 · 无边界</button>
-          <button role="tab" aria-selected="false" onclick="showSkill(1,this)">v2 · 带边界</button>
-        </div>
+        <span style="margin-left:auto;font:700 13px/1 var(--mono);color:#fff;background:var(--accent);padding:9px 15px;border-radius:8px;">v1 · 初版</span>
       </div>
       <div class="vbody on" id="skill0" role="tabpanel">
         <button class="copy" onclick="copyCode(this)">复制</button>
@@ -236,39 +233,6 @@ footer .sep{color:var(--faint);}
 - 绝大多数接口故障的根因都落在这五类中,**优先在这五类里定位**。
 - 不要一上来就假设是业务代码逻辑问题——先排除以上环境 / 请求因素。
 - 输出:定位到的根因属于上述哪一类,以及对应的修复动作。</code></pre>
-      </div>
-      <div class="vbody" id="skill1" role="tabpanel">
-        <button class="copy" onclick="copyCode(this)">复制</button>
-        <div class="vmeta">优化后:开头先<b>判断方向</b>,明确「数据内容不对就先读代码,本清单可能帮倒忙」,并写出「何时不要用」。只改了这点,后面会看到效果。</div>
-        <pre><code><span class="tc">---</span>
-<span class="tk">name</span>: debug-playbook
-<span class="tk">description</span>: 排查接口/爬虫类故障时的诊断线索清单。当故障症状指向环境或
-  请求层(整体报错、鉴权失败、被限流)时参考;若症状是数据内容错误
-  (少数据、错位、间歇性、时好时坏),优先直接读相关代码,不要套用本清单。
-<span class="tc">---</span>
-
-<span class="tb"># 接口故障诊断线索(优先级提示,非强制顺序)</span>
-
-先判断**根因方向**,再决定是否套用本清单:
-
-- 症状是**请求层失败**(报错码、整体失败、鉴权 / 限流信号)→ 本清单大概率有效。
-- 症状是**数据内容不对**(少了某些数据、错位、间歇、时好时坏)→ 根因很可能
-  在业务代码逻辑里,**先直接读处理数据的那段代码**,本清单可能把你带偏。
-
-<span class="tb">## 常见环境 / 请求层根因(按经验概率,不是必须顺序)</span>
-
-- 鉴权失效(token / cookie 过期)—— 通常整体 401 / 空
-- 触发限流(429、滑块、达到阈值后转空)
-- 缓存命中脏数据
-- 网络 / 代理不可达
-- 请求参数缺失 / 错误
-
-<span class="tb">## 何时不要用本 skill</span>
-
-数据"部分缺失 / 错位 / 重复 / 间歇"这类症状,根因常是**分页、时区、
-缓存 key、并发竞态**等代码逻辑问题。这类先读代码,别在环境层打转。
-
-输出:根因方向判断 + 具体根因 + 修复动作。</code></pre>
       </div>
     </div>
 
@@ -362,7 +326,47 @@ footer .sep{color:var(--faint);}
     <div class="reading">
       <div class="key"><b>最该记住的一点:光看通过率会骗你。</b>如果把完整代码喂给模型,带不带都能答对,通过率一样,什么问题都看不出来。差别只在「让它自己判断先查什么」时才暴露 —— 所以 skill-creator 让你看的是<b>真实输出和推理过程</b>,而不只是一个分数。这正是手动调优的价值,也是最多人跳过的一步。</div>
       <h3>看到问题之后怎么改</h3>
-      <p>在对比里看到被带偏,改法<strong>不是删掉 skill</strong>,而是给它一条边界 —— 就是上面 v2 做的:开头加一句「如果现象是数据内容不对,先去读代码,这套清单可能帮倒忙」。改完用<strong>同一组测试用例重跑</strong>。下面是三个用例 <strong>改前(v1)对改后(v2)</strong> 的真实重测,切换看每个的效果:</p>
+      <p>在对比里看到被带偏,改法<strong>不是删掉 skill</strong>,而是给它一条边界:开头加一句方向判断,并写明「何时不要用」。下面就是改后的 <strong>v2 全文</strong>(和前面的 v1 比,核心只多了开头那段边界);改完用同一组用例重跑,看三个用例 <strong>改前(v1)对改后(v2)</strong> 的效果:</p>
+    </div>
+    <div class="viewer">
+      <div class="head">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="fname">debug-playbook / SKILL.md · 改后</span>
+        <span style="margin-left:auto;font:700 13px/1 var(--mono);color:#fff;background:var(--green);padding:9px 15px;border-radius:8px;">v2 · 带边界</span>
+      </div>
+      <div class="vbody on">
+        <button class="copy" onclick="copyCode(this)">复制</button>
+        <div class="vmeta">改后:开头先<b>判断方向</b>,明确「数据内容不对就先读代码,本清单可能帮倒忙」,并加了「何时不要用」。和 v1 比就多了这些。</div>
+        <pre><code><span class="tc">---</span>
+<span class="tk">name</span>: debug-playbook
+<span class="tk">description</span>: 排查接口/爬虫类故障时的诊断线索清单。当故障症状指向环境或
+  请求层(整体报错、鉴权失败、被限流)时参考;若症状是数据内容错误
+  (少数据、错位、间歇性、时好时坏),优先直接读相关代码,不要套用本清单。
+<span class="tc">---</span>
+
+<span class="tb"># 接口故障诊断线索(优先级提示,非强制顺序)</span>
+
+先判断**根因方向**,再决定是否套用本清单:
+
+- 症状是**请求层失败**(报错码、整体失败、鉴权 / 限流信号)→ 本清单大概率有效。
+- 症状是**数据内容不对**(少了某些数据、错位、间歇、时好时坏)→ 根因很可能
+  在业务代码逻辑里,**先直接读处理数据的那段代码**,本清单可能把你带偏。
+
+<span class="tb">## 常见环境 / 请求层根因(按经验概率,不是必须顺序)</span>
+
+- 鉴权失效(token / cookie 过期)—— 通常整体 401 / 空
+- 触发限流(429、滑块、达到阈值后转空)
+- 缓存命中脏数据
+- 网络 / 代理不可达
+- 请求参数缺失 / 错误
+
+<span class="tb">## 何时不要用本 skill</span>
+
+数据"部分缺失 / 错位 / 重复 / 间歇"这类症状,根因常是**分页、时区、
+缓存 key、并发竞态**等代码逻辑问题。这类先读代码,别在环境层打转。
+
+输出:根因方向判断 + 具体根因 + 修复动作。</code></pre>
+      </div>
     </div>
     <div class="compare" id="fix">
       <div class="etabs" role="tablist" aria-label="改前改后对比">
