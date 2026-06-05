@@ -345,16 +345,16 @@ footer .sep{color:var(--faint);}
     </div>
     <div class="reading">
       <h3>反例不止时区 —— v1 在好几种故障上都会带偏</h3>
-      <p style="color:var(--muted);font-size:15px;margin:0 0 6px;">下面四类故障,真因都在代码里,但表面都像「接口问题」。不带 skill 时模型直奔真因;带上 v1 五步清单,就被锚到了环境层:</p>
+      <p style="color:var(--muted);font-size:15px;margin:0 0 6px;">四类故障,真因都在代码里,但表面都像「接口问题」。不带 skill 直奔真因;带 v1 五步清单全被锚到环境层;换成带边界的 v2,四个又都救回来了:</p>
     </div>
     <div style="overflow-x:auto;border:1px solid var(--line);border-radius:11px;margin:4px 0 10px;">
       <table class="cmpt tw">
-        <thead><tr><th>故障现象</th><th>真因(代码层)</th><th>不带 skill</th><th>带 v1 五步清单</th></tr></thead>
+        <thead><tr><th>故障现象 → 真因</th><th>不带 skill</th><th>带 v1</th><th>带 v2(改后)</th></tr></thead>
         <tbody>
-          <tr><td>数据缺上午、本地却正常</td><td>时区</td><td><span style="color:var(--green);font-weight:600;">✓ 直指时区</span></td><td><span style="color:var(--red);font-weight:600;">✗ 缓存排第一</span></td></tr>
-          <tr><td>导出 CSV 中文全乱码</td><td>导出编码</td><td><span style="color:var(--green);font-weight:600;">✓ 直指编码</span></td><td><span style="color:var(--red);font-weight:600;">✗ 硬塞进「查缓存」</span></td></tr>
-          <tr><td>高峰偶尔看到别人购物车</td><td>并发 / 共享状态</td><td><span style="color:var(--green);font-weight:600;">✓ 直指 ThreadLocal 竞态</span></td><td><span style="color:var(--red);font-weight:600;">✗ 查缓存 key / 鉴权</span></td></tr>
-          <tr><td>列表固定少最后一页</td><td>分页 off-by-one</td><td><span style="color:var(--green);font-weight:600;">✓ 直指分页循环</span></td><td><span style="color:var(--amber);font-weight:600;">⚠ 找到但归类「查参数」</span></td></tr>
+          <tr><td>数据缺上午、本地正常 <span style="color:var(--muted);">→ 时区</span></td><td><span style="color:var(--green);font-weight:600;">✓ 时区</span></td><td><span style="color:var(--red);font-weight:600;">✗ 缓存第一</span></td><td><span style="color:var(--green);font-weight:600;">✓ 救回·时区</span></td></tr>
+          <tr><td>导出 CSV 中文乱码 <span style="color:var(--muted);">→ 导出编码</span></td><td><span style="color:var(--green);font-weight:600;">✓ 编码</span></td><td><span style="color:var(--red);font-weight:600;">✗ 硬塞缓存</span></td><td><span style="color:var(--green);font-weight:600;">✓ 救回·编码</span></td></tr>
+          <tr><td>高峰看到别人购物车 <span style="color:var(--muted);">→ 并发/共享</span></td><td><span style="color:var(--green);font-weight:600;">✓ ThreadLocal</span></td><td><span style="color:var(--red);font-weight:600;">✗ 查缓存 key</span></td><td><span style="color:var(--green);font-weight:600;">✓ 救回·读代码</span></td></tr>
+          <tr><td>列表少最后一页 <span style="color:var(--muted);">→ 分页</span></td><td><span style="color:var(--green);font-weight:600;">✓ 分页循环</span></td><td><span style="color:var(--amber);font-weight:600;">⚠ 查参数</span></td><td><span style="color:var(--green);font-weight:600;">✓ 救回·分页</span></td></tr>
         </tbody>
       </table>
     </div>
