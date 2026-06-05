@@ -528,7 +528,21 @@ footer .sep{color:var(--faint);}
     </div>
     </div>
     <div class="reading">
-      <p>说白了,自动化就是把上面那步「人来改」换成「机器自己改」。下面三个主流做法不太一样,但都在解同一个难题:<strong>没人盯着的时候,怎么让它越改越好、而不是越改越歪</strong>。</p>
+      <p>说白了,自动化就是把上面那步「人来改」换成「机器自己改」。先看它<strong>真能不能</strong>自己改 —— 把 v1 和它那次时区失败的记录丢给模型,让它自己诊断、自己提改进:</p>
+      <details style="background:var(--surface);border:1px solid var(--line);border-radius:11px;margin:14px 0;">
+        <summary style="cursor:pointer;padding:14px 18px;font-size:15px;color:var(--fg);font-weight:600;">展开:模型自己的反思(真实输出,未改写)</summary>
+        <div style="padding:0 18px 16px;">
+          <p style="font:600 12px/1 var(--mono);color:var(--muted);margin:14px 0 7px;">它自己诊断出的问题</p>
+          <pre><code>· 规则「不要假设是代码问题」,把「时区」当成代码逻辑压住了;
+· 用户已说「鉴权正常」,它仍按 1→5 线性走,没有分流;
+· 「本地正常、生产异常」这条强线索,清单完全没利用。</code></pre>
+          <p style="font:600 12px/1 var(--mono);color:var(--muted);margin:16px 0 7px;">它自己提的改进</p>
+          <pre><code>① 加「快速分流」:本地 / 生产不一致 → 优先查时区、环境;
+② 「查缓存」加适用判断:数据按时间规律偏移 → 指向时区,不是缓存;
+③ 改排除规则:时区 / 日期边界算环境因素,不受「别假设代码问题」限制。</code></pre>
+        </div>
+      </details>
+      <div class="key" style="margin-bottom:22px;">没人教,它自己就诊断出「时区被规则压住了、缺分流判断」,还自己提出「加分流 / 边界」 —— 和我们手动改的 v2 几乎是同一件事,甚至更细。这就是 GEPA 在做的:<b>读失败、自己改</b>。下面三种框架,只是把它系统化、自动跑起来的不同路子:</div>
       <div class="evos" style="grid-template-columns:1fr;">
         <div class="evo">
           <h4 style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">GEPA <span>反思式进化</span> <a href="https://github.com/gepa-ai/gepa" target="_blank" rel="noopener" style="margin-left:auto;font:600 12px/1 var(--mono);color:var(--accent);white-space:nowrap;">gepa-ai/gepa ↗</a></h4>
