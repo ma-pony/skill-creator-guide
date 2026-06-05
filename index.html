@@ -345,16 +345,16 @@ footer .sep{color:var(--faint);}
     </div>
     <div class="reading">
       <h3>反例不止时区 —— v1 在好几种故障上都会带偏</h3>
-      <p style="color:var(--muted);font-size:15px;margin:0 0 6px;">四类故障,真因都在代码里,但表面都像「接口问题」。不带 skill 直奔真因;带 v1 五步清单全被锚到环境层;换成带边界的 v2,四个又都救回来了:</p>
+      <p style="color:var(--muted);font-size:15px;margin:0 0 6px;">四类故障,真因都在代码里,但表面都像「接口问题」。不带 skill 直奔真因;带上 v1 五步清单,全被锚到了环境层:</p>
     </div>
     <div style="overflow-x:auto;border:1px solid var(--line);border-radius:11px;margin:4px 0 10px;">
       <table class="cmpt tw">
-        <thead><tr><th>故障现象 → 真因</th><th>不带 skill</th><th>带 v1</th><th>带 v2(改后)</th></tr></thead>
+        <thead><tr><th>故障现象 → 真因</th><th>不带 skill</th><th>带 v1 五步清单</th></tr></thead>
         <tbody>
-          <tr><td>数据缺上午、本地正常 <span style="color:var(--muted);">→ 时区</span></td><td><span style="color:var(--green);font-weight:600;">✓ 时区</span></td><td><span style="color:var(--red);font-weight:600;">✗ 缓存第一</span></td><td><span style="color:var(--green);font-weight:600;">✓ 救回·时区</span></td></tr>
-          <tr><td>导出 CSV 中文乱码 <span style="color:var(--muted);">→ 导出编码</span></td><td><span style="color:var(--green);font-weight:600;">✓ 编码</span></td><td><span style="color:var(--red);font-weight:600;">✗ 硬塞缓存</span></td><td><span style="color:var(--green);font-weight:600;">✓ 救回·编码</span></td></tr>
-          <tr><td>高峰看到别人购物车 <span style="color:var(--muted);">→ 并发/共享</span></td><td><span style="color:var(--green);font-weight:600;">✓ ThreadLocal</span></td><td><span style="color:var(--red);font-weight:600;">✗ 查缓存 key</span></td><td><span style="color:var(--green);font-weight:600;">✓ 救回·读代码</span></td></tr>
-          <tr><td>列表少最后一页 <span style="color:var(--muted);">→ 分页</span></td><td><span style="color:var(--green);font-weight:600;">✓ 分页循环</span></td><td><span style="color:var(--amber);font-weight:600;">⚠ 查参数</span></td><td><span style="color:var(--green);font-weight:600;">✓ 救回·分页</span></td></tr>
+          <tr><td>数据缺上午、本地正常 <span style="color:var(--muted);">→ 时区</span></td><td><span style="color:var(--green);font-weight:600;">✓ 直指时区</span></td><td><span style="color:var(--red);font-weight:600;">✗ 缓存排第一</span></td></tr>
+          <tr><td>导出 CSV 中文乱码 <span style="color:var(--muted);">→ 导出编码</span></td><td><span style="color:var(--green);font-weight:600;">✓ 直指编码</span></td><td><span style="color:var(--red);font-weight:600;">✗ 硬塞「查缓存」</span></td></tr>
+          <tr><td>高峰看到别人购物车 <span style="color:var(--muted);">→ 并发/共享</span></td><td><span style="color:var(--green);font-weight:600;">✓ ThreadLocal 竞态</span></td><td><span style="color:var(--red);font-weight:600;">✗ 查缓存 key</span></td></tr>
+          <tr><td>列表少最后一页 <span style="color:var(--muted);">→ 分页</span></td><td><span style="color:var(--green);font-weight:600;">✓ 分页循环</span></td><td><span style="color:var(--amber);font-weight:600;">⚠ 归类「查参数」</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -459,6 +459,28 @@ footer .sep{color:var(--faint);}
       </div>
     </div>
   </div>
+</section>
+
+<section>
+  <div class="wrap"><div class="reading">
+    <span class="tag">验证 · 不止三例</span>
+    <h2>回到那四个反例 —— v2 一句边界,全救回</h2>
+    <p>前面被 v1 带偏的四个反例(时区 / 编码 / 并发 / 分页),换成带边界的 v2 再跑一遍:</p>
+  </div></div>
+  <div class="wrap"><div style="overflow-x:auto;border:1px solid var(--line);border-radius:11px;margin:4px 0 14px;max-width:var(--measure);">
+      <table class="cmpt tw">
+        <thead><tr><th>故障 → 真因</th><th>带 v1(被带偏)</th><th>带 v2(救回)</th></tr></thead>
+        <tbody>
+          <tr><td>数据缺上午 <span style="color:var(--muted);">→ 时区</span></td><td><span style="color:var(--red);font-weight:600;">✗ 缓存排第一</span></td><td><span style="color:var(--green);font-weight:600;">✓ 时区</span></td></tr>
+          <tr><td>导出乱码 <span style="color:var(--muted);">→ 编码</span></td><td><span style="color:var(--red);font-weight:600;">✗ 硬塞缓存</span></td><td><span style="color:var(--green);font-weight:600;">✓ 导出编码</span></td></tr>
+          <tr><td>串购物车 <span style="color:var(--muted);">→ 并发</span></td><td><span style="color:var(--red);font-weight:600;">✗ 查缓存 key</span></td><td><span style="color:var(--green);font-weight:600;">✓ 读代码</span></td></tr>
+          <tr><td>少一页 <span style="color:var(--muted);">→ 分页</span></td><td><span style="color:var(--amber);font-weight:600;">⚠ 查参数</span></td><td><span style="color:var(--green);font-weight:600;">✓ 直指分页</span></td></tr>
+        </tbody>
+      </table>
+  </div></div>
+  <div class="wrap"><div class="reading">
+    <div class="key">同一句「数据内容不对就先读代码」,四类故障全从环境层拉回了代码层 —— 这条边界不是给时区打的补丁,是对整类「接口正常、但数据不对」的故障都成立。</div>
+  </div></div>
 </section>
 
 <section>
