@@ -454,34 +454,34 @@ footer .sep{color:var(--faint);}
     </div>
     </div>
     <div class="reading">
-      <p>自动化,无非是把循环里第 ④ 步「改进」从人换成机器。三种主流思路,引擎各不同,但解的是同一个问题:<strong>没有可靠分数时,怎么安全地优化</strong>。</p>
+      <p>说白了,自动化就是把上面那步「人来改」换成「机器自己改」。下面三个主流做法不太一样,但都在解同一个难题:<strong>没人盯着的时候,怎么让它越改越好、而不是越改越歪</strong>。</p>
       <div class="evos" style="grid-template-columns:1fr;">
         <div class="evo">
           <h4 style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">GEPA <span>反思式进化</span> <a href="https://github.com/gepa-ai/gepa" target="_blank" rel="noopener" style="margin-left:auto;font:600 12px/1 var(--mono);color:var(--accent);white-space:nowrap;">gepa-ai/gepa ↗</a></h4>
-          <p style="color:var(--ink);font-size:15px;">不调权重。让模型读失败案例的<strong>完整执行轨迹</strong>,用自然语言写清「哪一步错、为什么」,据此改 skill 正文。</p>
-          <p style="margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);"><b style="color:var(--accent);">关键 · </b>语言诊断比数值梯度信息量大得多,一次失败就说清问题 —— 比强化学习(GRPO)省约 <strong>35× 试错</strong>、效果还高约 20%。选择上用 <strong>Pareto 前沿</strong>:不留单一最高分,而留一组各有所长的候选,避免过早收敛到局部最优。</p>
+          <p style="color:var(--ink);font-size:15px;">跑一遍,失败了就让 AI 回头看整个过程 —— 哪一步错了、为什么,然后照着改 skill。相当于让它自己<strong>记错题、再订正</strong>。</p>
+          <p style="margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);"><b style="color:var(--accent);">聪明在哪 · </b>它不会只留一个「当前最好」的版本,而是留一小批<strong>各有所长</strong>的(这个擅长这类题、那个擅长那类),不一条道走到黑。这样改起来又省试错(约 35 倍)、效果还更好。</p>
           <svg class="mech" viewBox="0 0 600 180" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC',sans-serif">
   <line x1="70" y1="128" x2="558" y2="128" stroke="#d6dce6" stroke-width="1.5"/>
   <line x1="70" y1="128" x2="70" y2="20" stroke="#d6dce6" stroke-width="1.5"/>
   <text x="556" y="122" fill="#6b7587" font-size="11" text-anchor="end">在任务 A 上更强 →</text>
   <text x="76" y="17" fill="#6b7587" font-size="11">↑ 在任务 B 上更强</text>
-  <circle cx="178" cy="102" r="6" fill="#c2cad6"/><text x="191" y="106" fill="#9aa3b2" font-size="11">被支配,淘汰</text>
+  <circle cx="178" cy="102" r="6" fill="#c2cad6"/><text x="191" y="106" fill="#9aa3b2" font-size="11">明显更差,淘汰</text>
   <polyline points="126,72 272,54 432,40" fill="none" stroke="#4361d8" stroke-width="1.5" stroke-dasharray="5 4"/>
   <circle cx="126" cy="72" r="7" fill="#4361d8"/><circle cx="272" cy="54" r="7" fill="#4361d8"/><circle cx="432" cy="40" r="7" fill="#4361d8"/>
-  <text x="300" y="168" fill="#39424f" font-size="12" text-anchor="middle">Pareto 前沿:各有所长的候选都保留,不只留得分最高的那一个</text>
+  <text x="300" y="168" fill="#39424f" font-size="12" text-anchor="middle">各有所长的都留下,不只留分数最高的那一个</text>
 </svg>
         </div>
         <div class="evo">
           <h4 style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">SkillOpt <span>当参数训练</span> <a href="https://github.com/microsoft/SkillOpt" target="_blank" rel="noopener" style="margin-left:auto;font:600 12px/1 var(--mono);color:var(--accent);white-space:nowrap;">microsoft/SkillOpt ↗</a></h4>
-          <p style="color:var(--ink);font-size:15px;">把 skill 正文当成<strong>可训练参数</strong>,套神经网络那一整套 —— 逐轮训练、每轮按小批量在真实任务上跑一遍当分数,按结果生成一批「编辑」,改动幅度逐轮收窄。</p>
-          <p style="margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);"><b style="color:var(--accent);">关键 · </b>防退化靠一道<strong>留出验证</strong>的闸:每次改完先在留出的题目上验一遍,没变好就回滚。但这道闸得<strong>真开着</strong> —— 有的实现默认直接接受改动、绕过验证,就退化成「自我感觉良好地乱改」。</p>
+          <p style="color:var(--ink);font-size:15px;">把 skill 的文字当成「可以一点点拧的旋钮」,一轮轮地调:拿真实任务跑一遍、打个分,再照着分数改一改,而且<strong>越往后改得越小步</strong>。</p>
+          <p style="margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);"><b style="color:var(--accent);">关键 · </b>每改完先拿一批<strong>没动过的题目</strong>验一下,没变好就撤回。但这个「验完再决定」一定要开着 —— 有的实现默认<strong>改了就认</strong>,等于自己骗自己、越改越歪。</p>
           <svg class="mech" viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC',sans-serif">
   <defs><marker id="m1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#6b7587"/></marker></defs>
   <rect x="14" y="52" width="104" height="44" rx="8" fill="#eef2f8" stroke="#d6dce6"/><text x="66" y="79" text-anchor="middle" fill="#10151f" font-size="13">当前 skill</text>
   <line x1="118" y1="74" x2="160" y2="74" stroke="#6b7587" stroke-width="1.4" marker-end="url(#m1)"/><text x="139" y="66" text-anchor="middle" fill="#6b7587" font-size="10">改一批</text>
   <rect x="164" y="52" width="100" height="44" rx="8" fill="#eef2f8" stroke="#d6dce6"/><text x="214" y="79" text-anchor="middle" fill="#10151f" font-size="13">候选版本</text>
   <line x1="264" y1="74" x2="312" y2="74" stroke="#6b7587" stroke-width="1.4" marker-end="url(#m1)"/>
-  <path d="M362,50 L398,74 L362,98 L326,74 Z" fill="#fff" stroke="#4361d8" stroke-width="1.6"/><text x="362" y="78" text-anchor="middle" fill="#4361d8" font-size="11">验证闸</text>
+  <path d="M362,50 L398,74 L362,98 L326,74 Z" fill="#fff" stroke="#4361d8" stroke-width="1.6"/><text x="362" y="78" text-anchor="middle" fill="#4361d8" font-size="11">验一下</text>
   <line x1="398" y1="68" x2="450" y2="45" stroke="#1a9d5a" stroke-width="1.4" marker-end="url(#m1)"/><text x="426" y="40" fill="#1a9d5a" font-size="10">变好</text>
   <rect x="456" y="26" width="92" height="38" rx="8" fill="rgba(26,157,90,.10)" stroke="#1a9d5a"/><text x="502" y="50" text-anchor="middle" fill="#1a9d5a" font-size="12.5">接受</text>
   <line x1="398" y1="80" x2="450" y2="103" stroke="#d2553f" stroke-width="1.4" marker-end="url(#m1)"/><text x="424" y="113" fill="#d2553f" font-size="10">没变好</text>
@@ -490,12 +490,12 @@ footer .sep{color:var(--faint);}
         </div>
         <div class="evo">
           <h4 style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">Darwinian <span>种群进化</span> <a href="https://github.com/imbue-ai/darwinian_evolver" target="_blank" rel="noopener" style="margin-left:auto;font:600 12px/1 var(--mono);color:var(--accent);white-space:nowrap;">imbue-ai/darwinian_evolver ↗</a></h4>
-          <p style="color:var(--ink);font-size:15px;">把候选当<strong>种群</strong>。打分器评估、变异器改,按分数<strong>加权选父代</strong>(偏高分但不只选最高),并给没试过的方向加「新颖度」奖励鼓励探索。</p>
-          <p style="margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);"><b style="color:var(--accent);">关键 · </b>防过拟合靠把失败案例分成两份 —— <strong>一份只用来改、一份只用来验</strong>(即留出),泛化好不好由留出的那份说了算;再加一道两阶段过滤(快筛 + 细验),挡掉「看着像改进、其实没用」的变异。</p>
+          <p style="color:var(--ink);font-size:15px;">一次养<strong>一群</strong>候选,挨个打分:好的多留种,再随机改一改、生出下一代;还故意鼓励试些<strong>没走过的方向</strong>,别都挤在一条路上。</p>
+          <p style="margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:14px;color:var(--ink);"><b style="color:var(--accent);">关键 · </b>把题目分两堆 —— <strong>一堆用来改、一堆藏起来只用来考</strong>。改得好不好看藏起来那堆的成绩,免得「只在练习册上好看、一考真题就垮」。</p>
           <svg class="mech" viewBox="0 0 600 160" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC',sans-serif">
   <text x="14" y="43" fill="#6b7587" font-size="11.5">这一代</text>
   <circle cx="98" cy="38" r="13" fill="#cdd6ea"/><circle cx="152" cy="38" r="13" fill="#9fb2e6"/><circle cx="206" cy="38" r="13" fill="#cdd6ea"/><circle cx="260" cy="38" r="13" fill="#7c97e0"/><circle cx="314" cy="38" r="13" fill="#cdd6ea"/><circle cx="368" cy="38" r="13" fill="#aebfe8"/>
-  <text x="300" y="92" text-anchor="middle" fill="#39424f" font-size="12">↓ 按分数加权选优,再变异(并给新方向加新颖度)</text>
+  <text x="300" y="92" text-anchor="middle" fill="#39424f" font-size="12">↓ 留下好的、随机改一改、试点新方向</text>
   <text x="14" y="129" fill="#6b7587" font-size="11.5">下一代</text>
   <circle cx="98" cy="124" r="13" fill="#7c97e0"/><circle cx="152" cy="124" r="13" fill="#4361d8"/><circle cx="206" cy="124" r="13" fill="#6b86dc"/><circle cx="260" cy="124" r="13" fill="#4361d8"/><circle cx="314" cy="124" r="13" fill="#7c97e0"/><circle cx="368" cy="124" r="13" fill="#4361d8"/>
   <text x="442" y="128" fill="#6b7587" font-size="11">颜色越深 = 越优</text>
@@ -509,7 +509,7 @@ footer .sep{color:var(--faint);}
         <tbody>
           <tr><td>进化对象</td><td>prompt / 指令(可多模块系统)</td><td>skill 文档</td><td>任意工件(prompt / 代码 / agent)</td></tr>
           <tr><td>改的方式</td><td>反思失败轨迹、语言诊断</td><td>六阶段:跑 → 反思 → 汇总 → 选 → 改 → 验</td><td>可插拔变异器 + 选择</td></tr>
-          <tr><td>选择机制</td><td>Pareto 前沿(保多样)</td><td>留出验证闸(求单调、不退化)</td><td>加权选父代 + 新颖度</td></tr>
+          <tr><td>选择机制</td><td>Pareto 前沿(保多样)</td><td>留出验一下(求单调、不退化)</td><td>加权选父代 + 新颖度</td></tr>
           <tr><td>评估开销</td><td>极低(比 GRPO 省约 35×)</td><td>高(每轮真实任务跑分)</td><td>高(种群 × 代数)</td></tr>
           <tr><td>防过拟合</td><td>Pareto 留出</td><td>留出验证</td><td>训练 / 留出案例分离</td></tr>
           <tr><td>出身</td><td>DSPy 生态 · ICLR 2026 Oral</td><td>microsoft</td><td>imbue · 受达尔文-哥德尔机启发</td></tr>
@@ -531,7 +531,7 @@ footer .sep{color:var(--faint);}
         </table>
       </div>
       <p class="sub" style="margin-top:14px;">如果 skill 数量不多、或还没有可信的自动评分 —— 别急着上自动化,前面那套手动「带 / 不带对照」已经够。</p>
-      <div class="key">三者引擎不同(语言反思 / 梯度式训练 / 种群进化),但都守着<b>同一条铁律:用来「改」的数据和用来「验」的数据必须严格分开</b> —— GEPA 的 Pareto 留出、SkillOpt 的留出验证、Darwinian 的留出集,本质是同一招。否则就是在测试集上调参、自己骗自己:分数好看,一到真实场景就崩。</div>
+      <div class="key">三个做法不一样,但都守着<b>同一条规矩:用来「改」的题,和用来「验」的题,必须分开。</b>否则就像拿考试原题去练 —— 分数好看,真上场就露馅。</div>
       
     </div>
   </div>
