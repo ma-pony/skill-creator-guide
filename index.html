@@ -336,7 +336,7 @@ footer .sep{color:var(--faint);}
       </div>
       <div class="vbody on">
         <button class="copy" onclick="copyCode(this)">复制</button>
-        <div class="vmeta">改后:开头先<b>判断方向</b>,明确「数据内容不对就先读代码,本清单可能帮倒忙」,并加了「何时不要用」。和 v1 比就多了这些。</div>
+        <div class="vmeta">改后:开头先<b>判断方向</b>,并写明「何时不要用」。注意 —— 边界给的是<b>怎么判断方向</b>,不是「时区 / 缓存」这种具体答案;把测试用例的答案写进 skill,评测就失效了。</div>
         <pre><code><span class="tc">---</span>
 <span class="tk">name</span>: debug-playbook
 <span class="tk">description</span>: 排查接口/爬虫类故障时的诊断线索清单。当故障症状指向环境或
@@ -362,8 +362,9 @@ footer .sep{color:var(--faint);}
 
 <span class="tb">## 何时不要用本 skill</span>
 
-数据"部分缺失 / 错位 / 重复 / 间歇"这类症状,根因常是**分页、时区、
-缓存 key、并发竞态**等代码逻辑问题。这类先读代码,别在环境层打转。
+如果症状是「数据内容不对」—— 少了一部分、对不上、时好时坏、间歇出现 ——
+根因通常在处理数据的那段业务代码里,而不在环境或请求层。
+这类先去读相关代码,别套用本清单。
 
 输出:根因方向判断 + 具体根因 + 修复动作。</code></pre>
       </div>
