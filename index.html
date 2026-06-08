@@ -67,6 +67,12 @@ section{padding:clamp(48px,8vw,72px) 0;border-bottom:1px solid var(--line);}
 .nine .it.me{border-color:var(--accent);background:#eef2ff;}
 .nine .it.me .tag2{margin-left:4px;font:700 10px/1 var(--mono);color:#fff;background:var(--accent);padding:3px 6px;border-radius:5px;white-space:nowrap;}
 @media(max-width:640px){.nine{grid-template-columns:1fr;}}
+.tips{max-width:var(--measure);display:flex;flex-direction:column;gap:9px;margin:18px 0;}
+.tips .ti{padding:13px 16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;line-height:1.55;}
+.tips .ti.done{border-left:3px solid var(--green);}
+.tips .ti .k{font-weight:700;color:var(--fg);}
+.tips .ti .b{display:inline-block;margin-left:7px;font:700 10px/1 var(--mono);color:#fff;background:var(--green);padding:4px 7px;border-radius:5px;vertical-align:1px;}
+.tips .ti .d{color:var(--ink);font-size:.93em;}
 h2{font-size:var(--t-h2);line-height:1.25;color:var(--fg);font-weight:680;letter-spacing:-.015em;margin-bottom:14px;}
 h3{font-size:var(--t-h3);color:var(--fg);font-weight:640;margin:38px 0 10px;}
 p{margin:16px 0;}
@@ -530,6 +536,25 @@ footer .sep{color:var(--faint);}
     </ol>
     <div class="key"><b>真正的保险不在「边界写得巧」,而在用没见过的新故障验证。</b>改完别只测原用例 —— 拿措辞完全不同的新故障考它。比如「报表整列串行」「物流接口偶发超时」,v2 都判对了(数据内容 → 读代码、请求层 → 用清单),才算真泛化、不是背这几道题。</div>
     <div class="cite"><span class="lbl">呼应官方两条心法</span><p>这也对上官方的两条:<strong>别写模型默认就会的</strong>(don't state the obvious),skill 里信号最高的是 <span class="term">gotchas</span>(踩坑点)。一条好的边界,本质就是一条 gotcha —— 不重复常识,只标出模型会栽的地方。<a href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills" target="_blank" rel="noopener">原文 ↗</a></p></div>
+  </div></div>
+</section>
+
+<section id="tips">
+  <div class="wrap"><div class="reading">
+    <span class="tag">通用心法 · 不止这一个 skill</span>
+    <h2>官方还给了 8 条制作建议</h2>
+    <p>上面是把<strong>一个</strong> skill 打磨好的全过程。跳出这个例子,Claude Code 团队在<a href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills" target="_blank" rel="noopener">同一篇博客</a>里给了一组通用心法 —— 前三条我们前面已经实践过,后面几条是值得收藏的补充:</p>
+    <div class="tips">
+      <div class="ti done"><span class="k">别说显而易见的</span><span class="b">前文已用</span><span class="d"> · 别写模型默认就会的;知识型 skill 要给「反默认」的信息(官方例:避开 Inter 字体和紫色渐变)</span></div>
+      <div class="ti done"><span class="k">建一个 gotchas 区</span><span class="b">前文已用</span><span class="d"> · 最高信号的内容,从模型实际踩的坑里反复累积</span></div>
+      <div class="ti done"><span class="k">别把模型逼上铁轨(railroading)</span><span class="b">前文已用</span><span class="d"> · 给足信息,但留出适应当下情况的灵活度</span></div>
+      <div class="ti"><span class="k">用文件系统做渐进披露</span><span class="d"> · skill 是文件夹:细节拆进 references/、模板放 assets/,模型按需才读</span></div>
+      <div class="ti"><span class="k">description 写给模型、不是人</span><span class="d"> · 它是「触发条件」不是摘要,写清何时触发、带上触发词</span></div>
+      <div class="ti"><span class="k">想清楚 setup</span><span class="d"> · 缺配置存 config.json、没配就问用户(可让它用 AskUserQuestion)</span></div>
+      <div class="ti"><span class="k">帮模型记忆</span><span class="d"> · 用 log / JSON / SQLite 存历史,下次读自己的记录就知道变了什么</span></div>
+      <div class="ti"><span class="k">存脚本、让它生成代码</span><span class="d"> · 把回合花在「编排下一步」,而不是重建样板</span></div>
+      <div class="ti"><span class="k">按需 hook</span><span class="d"> · 只在该 skill 激活时生效的护栏,如临时拦 rm -rf、DROP TABLE</span></div>
+    </div>
   </div></div>
 </section>
 
