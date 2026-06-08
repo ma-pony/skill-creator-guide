@@ -59,6 +59,14 @@ section{padding:clamp(48px,8vw,72px) 0;border-bottom:1px solid var(--line);}
 .cite p{margin:0;font-size:.97em;color:var(--ink);line-height:1.65;}
 .cite a{color:var(--accent);font-weight:600;white-space:nowrap;}
 .cite .term{font-style:italic;font-weight:700;color:var(--fg);}
+.nine{max-width:var(--measure);display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0;}
+.nine .it{display:flex;gap:9px;align-items:baseline;padding:11px 14px;background:var(--surface);border:1px solid var(--line);border-radius:9px;font-size:.9em;line-height:1.45;}
+.nine .it .num{flex:0 0 auto;color:var(--accent);font:700 12px/1.5 var(--mono);}
+.nine .it b{color:var(--fg);font-weight:700;}
+.nine .it span.tx{color:var(--ink);}
+.nine .it.me{border-color:var(--accent);background:#eef2ff;}
+.nine .it.me .tag2{margin-left:4px;font:700 10px/1 var(--mono);color:#fff;background:var(--accent);padding:3px 6px;border-radius:5px;white-space:nowrap;}
+@media(max-width:640px){.nine{grid-template-columns:1fr;}}
 h2{font-size:var(--t-h2);line-height:1.25;color:var(--fg);font-weight:680;letter-spacing:-.015em;margin-bottom:14px;}
 h3{font-size:var(--t-h3);color:var(--fg);font-weight:640;margin:38px 0 10px;}
 p{margin:16px 0;}
@@ -203,6 +211,17 @@ footer .sep{color:var(--faint);}
     <p>先交代两个前提:本文说的 <strong>skill</strong> 遵循开放标准 <a href="https://agentskills.io/home" target="_blank" rel="noopener">Agent Skills</a>(一个文件夹 + 一个 <code>SKILL.md</code>,给 agent 补上某项能力);而创建和优化它,用的是 Anthropic 官方的 <a href="https://github.com/anthropics/skills/tree/main/skills/skill-creator" target="_blank" rel="noopener">skill-creator</a> —— 它本身也是一个 skill,能帮你生成 skill、写测试、跑评测、看结果。下面整套流程都基于它。</p>
     <p>skill-creator 会问你这个 skill 做什么、什么时候该触发、期望输出是什么,然后生成 <code>SKILL.md</code> 和目录骨架。这一步已经很成熟,不展开 —— 值得花时间的是后面。</p>
     <p>这套做法不是拍脑袋。Claude Code 团队在官方博客 <a href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills" target="_blank" rel="noopener">《Lessons from building Claude Code: how we use skills》</a> 里盘点了 Anthropic 内部全部 skill,归成 <strong>9 大类</strong>。我们下面要打磨的「接口故障排查」,正属于第 8 类 <strong>Runbook</strong>(症状 → 多工具排查 → 结构化报告)。文中还有个反直觉结论:回报最高的不是教模型「怎么做」,而是 <strong>验证类(Verification)</strong>—— 教它确认自己做对了。</p>
+    <div class="nine">
+      <div class="it"><span class="num">1</span><span class="tx"><b>库 / API 参考</b> · 内部库的用法与坑</span></div>
+      <div class="it"><span class="num">2</span><span class="tx"><b>产品验证</b> · 验证代码真的没做错(回报最高)</span></div>
+      <div class="it"><span class="num">3</span><span class="tx"><b>数据获取与分析</b> · 接数据与监控栈</span></div>
+      <div class="it"><span class="num">4</span><span class="tx"><b>业务流程自动化</b> · 多步骤合成一条命令</span></div>
+      <div class="it"><span class="num">5</span><span class="tx"><b>脚手架 / 模板</b> · 生成框架样板</span></div>
+      <div class="it"><span class="num">6</span><span class="tx"><b>代码质量与评审</b> · 强制规范、自动挑刺</span></div>
+      <div class="it"><span class="num">7</span><span class="tx"><b>CI/CD 与部署</b> · 拉取 / 灰度 / 回滚</span></div>
+      <div class="it me"><span class="num">8</span><span class="tx"><b>Runbook</b> · 症状 → 多工具排查 → 报告<span class="tag2">本文 demo</span></span></div>
+      <div class="it"><span class="num">9</span><span class="tx"><b>基础设施运维</b> · 带护栏的运维操作</span></div>
+    </div>
     <div class="cite"><span class="lbl">ANTHROPIC 官方博客</span><p>「最好的 skill 干净地落在某一类;想做太多的会横跨几类、把 agent 搞糊涂。」—— 单一职责,正是后面我们会反复碰到的主线。</p></div>
   </div></div>
 </section>
