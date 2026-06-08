@@ -660,9 +660,9 @@ footer .sep{color:var(--faint);}
         <tbody>
           <tr><td>进化对象</td><td>prompt / 指令(可多模块系统)</td><td>skill 文档</td><td>任意工件(prompt / 代码 / agent)</td></tr>
           <tr><td>改的方式</td><td>反思失败轨迹、语言诊断</td><td>六阶段:跑 → 反思 → 汇总 → 选 → 改 → 验</td><td>可插拔变异器 + 选择</td></tr>
-          <tr><td>选择机制</td><td>Pareto 前沿(保多样)</td><td>留出验一下(求单调、不退化)</td><td>加权选父代 + 新颖度</td></tr>
+          <tr><td>选择机制</td><td>帕累托前沿(Pareto frontier)(保多样)</td><td>留出验一下(求单调、不退化)</td><td>加权选父代 + 新颖度</td></tr>
           <tr><td>评估开销</td><td>极低(比 GRPO 省约 35×)</td><td>高(每轮真实任务跑分)</td><td>高(种群 × 代数)</td></tr>
-          <tr><td>防过拟合</td><td>Pareto 留出</td><td>留出验证</td><td>训练 / 留出案例分离</td></tr>
+          <tr><td>防过拟合</td><td>帕累托前沿 + 留出</td><td>留出验证</td><td>训练 / 留出案例分离</td></tr>
           <tr><td>出身</td><td>DSPy 生态 · ICLR 2026 Oral</td><td>microsoft</td><td>imbue · 受达尔文-哥德尔机启发</td></tr>
         </tbody>
       </table>
