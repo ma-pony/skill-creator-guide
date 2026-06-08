@@ -54,6 +54,11 @@ nav .links a.ext{color:var(--accent);}
 /* sections */
 section{padding:clamp(48px,8vw,72px) 0;border-bottom:1px solid var(--line);}
 .tag{display:inline-block;font:600 12px/1 var(--mono);letter-spacing:.06em;color:var(--accent);background:var(--surface);border:1px solid var(--line);padding:6px 11px;border-radius:7px;margin-bottom:18px;}
+.cite{max-width:var(--measure);margin:22px 0;padding:18px 22px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:0 11px 11px 0;}
+.cite .lbl{display:inline-block;font:700 11px/1.4 var(--mono);letter-spacing:.05em;color:var(--accent);margin-bottom:10px;}
+.cite p{margin:0;font-size:.97em;color:var(--ink);line-height:1.65;}
+.cite a{color:var(--accent);font-weight:600;white-space:nowrap;}
+.cite .term{font-style:italic;font-weight:700;color:var(--fg);}
 h2{font-size:var(--t-h2);line-height:1.25;color:var(--fg);font-weight:680;letter-spacing:-.015em;margin-bottom:14px;}
 h3{font-size:var(--t-h3);color:var(--fg);font-weight:640;margin:38px 0 10px;}
 p{margin:16px 0;}
@@ -197,6 +202,8 @@ footer .sep{color:var(--faint);}
     <h2>创建:现在不是难点</h2>
     <p>先交代两个前提:本文说的 <strong>skill</strong> 遵循开放标准 <a href="https://agentskills.io/home" target="_blank" rel="noopener">Agent Skills</a>(一个文件夹 + 一个 <code>SKILL.md</code>,给 agent 补上某项能力);而创建和优化它,用的是 Anthropic 官方的 <a href="https://github.com/anthropics/skills/tree/main/skills/skill-creator" target="_blank" rel="noopener">skill-creator</a> —— 它本身也是一个 skill,能帮你生成 skill、写测试、跑评测、看结果。下面整套流程都基于它。</p>
     <p>skill-creator 会问你这个 skill 做什么、什么时候该触发、期望输出是什么,然后生成 <code>SKILL.md</code> 和目录骨架。这一步已经很成熟,不展开 —— 值得花时间的是后面。</p>
+    <p>这套做法不是拍脑袋。Claude Code 团队在官方博客 <a href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills" target="_blank" rel="noopener">《Lessons from building Claude Code: how we use skills》</a> 里盘点了 Anthropic 内部全部 skill,归成 <strong>9 大类</strong>。我们下面要打磨的「接口故障排查」,正属于第 8 类 <strong>Runbook</strong>(症状 → 多工具排查 → 结构化报告)。文中还有个反直觉结论:回报最高的不是教模型「怎么做」,而是 <strong>验证类(Verification)</strong>—— 教它确认自己做对了。</p>
+    <div class="cite"><span class="lbl">ANTHROPIC 官方博客</span><p>「最好的 skill 干净地落在某一类;想做太多的会横跨几类、把 agent 搞糊涂。」—— 单一职责,正是后面我们会反复碰到的主线。</p></div>
   </div></div>
 </section>
 
@@ -372,6 +379,7 @@ footer .sep{color:var(--faint);}
     <div class="reading">
       <h3>看到问题之后怎么改</h3>
       <p>在对比里看到被带偏,改法<strong>不是删掉 skill</strong>,而是给它一条边界:开头加一句方向判断,并写明「何时不要用」。下面就是改后的 <strong>v2 全文</strong>(和前面的 v1 比,核心只多了开头那段边界);改完用同一组用例重跑,看三个用例 <strong>改前(v1)对改后(v2)</strong> 的效果:</p>
+      <div class="cite"><span class="lbl">和官方结论对上了 · RAILROADING</span><p>Claude Code 团队把「指令写得太具体、把模型逼上固定轨道」称作 <span class="term">railroading</span>(逼上铁轨),给的建议是「给模型需要的信息,但<strong>留出适应当下情况的灵活度</strong>」。我们这条边界 —— 不删清单、只补一句「何时不要用」—— 就是这个思路的落地。<a href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills" target="_blank" rel="noopener">原文 ↗</a></p></div>
     </div>
     <div class="viewer">
       <div class="head">
@@ -502,6 +510,7 @@ footer .sep{color:var(--faint);}
       <li><strong>写判断维度</strong>(「接口报没报错」)—— 最稳。给的是客观、可泛化的分类标准,不绑定任何具体症状词。v2 最后用的就是这层。</li>
     </ol>
     <div class="key"><b>真正的保险不在「边界写得巧」,而在用没见过的新故障验证。</b>改完别只测原用例 —— 拿措辞完全不同的新故障考它。比如「报表整列串行」「物流接口偶发超时」,v2 都判对了(数据内容 → 读代码、请求层 → 用清单),才算真泛化、不是背这几道题。</div>
+    <div class="cite"><span class="lbl">呼应官方两条心法</span><p>这也对上官方的两条:<strong>别写模型默认就会的</strong>(don't state the obvious),skill 里信号最高的是 <span class="term">gotchas</span>(踩坑点)。一条好的边界,本质就是一条 gotcha —— 不重复常识,只标出模型会栽的地方。<a href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills" target="_blank" rel="noopener">原文 ↗</a></p></div>
   </div></div>
 </section>
 
