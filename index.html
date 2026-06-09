@@ -28,6 +28,11 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:none;}
 .wrap{max-width:var(--wide);margin:0 auto;padding:0 28px;}
 .reading{width:min(var(--measure),100%);}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto;} *{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+/* —— sharecraft IH09 / design-system 收尾 —— */
+section{scroll-margin-top:84px;}
+h1,h2,h3,h4{text-wrap:balance;}
+p,li{text-wrap:pretty;}
+table,th,td,.stat,.tr4 .v,.eread b,.kpi,.num{font-variant-numeric:tabular-nums;}
 
 /* nav */
 nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
@@ -566,7 +571,7 @@ footer .sep{color:var(--faint);}
       <p>手动跑对照,优化一两个 skill 没问题。可一旦 skill 多了、还要持续维护,就需要自动化。先把上面这套调优画成一个循环:</p>
     </div>
     <div class="diag-wrap">
-    <div style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:26px 20px;margin:24px 0;max-width:760px;">
+    <div style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:26px 20px;margin:24px 0;max-width:var(--measure);">
       <svg viewBox="0 0 720 300" width="100%" role="img" aria-label="评估驱动优化循环:skill 草稿 → 跑评测 → 找出失败 → 改进 → 重测" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'PingFang SC',sans-serif">
         <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#4361d8"/></marker></defs>
         <rect x="15" y="150" width="150" height="56" rx="9" fill="#eef2f8" stroke="#d6dce6"/>
