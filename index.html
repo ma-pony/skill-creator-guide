@@ -556,13 +556,13 @@ footer .sep{color:var(--faint);}
     <span class="tag">手动调优 · 进阶</span>
     <h2>边界怎么写,才不是「背答案」</h2>
     <p>上面 v2 加的边界很有效,但有个坑要避开 —— 边界写到什么程度,决定了它是真本事还是假象。三个层次,从最糟到最稳:</p>
-    <ol class="steps">
+    <details class="raw" style="margin-top:8px;"><summary>展开:边界写法的三个层次 + 官方印证(进阶)</summary><div class="rawbody"><ol class="steps">
       <li><strong>写答案</strong>(在边界里点名「时区、缓存 key」)—— 最糟。等于把测试用例的答案抄进 skill,它「救回」只是<strong>泄题</strong>,换道题就废。</li>
       <li><strong>写症状清单</strong>(「时好时坏、间歇、错位」)—— 比答案安全,但如果这些症状正好照着测试用例描述,就是<strong>隐性过拟合</strong>:你在教它「认出这几道题」,不是教通用判断。</li>
       <li><strong>写判断维度</strong>(「接口报没报错」)—— 最稳。给的是客观、可泛化的分类标准,不绑定任何具体症状词。v2 最后用的就是这层。</li>
     </ol>
     <div class="key"><b>真正的保险不在「边界写得巧」,而在用没见过的新故障验证。</b>改完别只测原用例 —— 拿措辞完全不同的新故障考它。比如「报表整列串行」「物流接口偶发超时」,v2 都判对了(数据内容 → 读代码、请求层 → 用清单),才算真泛化、不是背这几道题。</div>
-    <div class="cite"><span class="lbl">呼应官方两条心法</span><p>这也对上官方的两条:<strong>别写模型默认就会做的事</strong>,skill 里信号最高的是 <span class="term">「踩坑提示」</span>(gotchas)。一条好的边界,本质就是一条「踩坑提示」—— 不重复常识,只标出模型会栽的地方。<a href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills" target="_blank" rel="noopener">原文 ↗</a></p></div>
+    <div class="cite"><span class="lbl">呼应官方两条心法</span><p>这也对上官方的两条:<strong>别写模型默认就会做的事</strong>,skill 里信号最高的是 <span class="term">「踩坑提示」</span>(gotchas)。一条好的边界,本质就是一条「踩坑提示」—— 不重复常识,只标出模型会栽的地方。<a href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills" target="_blank" rel="noopener">原文 ↗</a></p></div></div></details>
   </div></div>
 </section>
 
@@ -571,7 +571,7 @@ footer .sep{color:var(--faint);}
     <span class="tag">通用心法 · 不止这一个 skill</span>
     <h2>官方还给了 8 条制作建议</h2>
     <p>上面是把<strong>一个</strong> skill 打磨好的全过程。跳出这个例子,Claude Code 团队在<a href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills" target="_blank" rel="noopener">同一篇博客</a>里给了一组通用心法 —— 前三条我们前面已经实践过,后面几条是值得收藏的补充:</p>
-    <div class="tips">
+    <details class="raw" style="margin-top:16px;"><summary>展开:8 条通用制作建议(可选)</summary><div class="rawbody"><div class="tips">
       <div class="ti done"><span class="k">别说显而易见的</span><span class="b">前文已用</span><span class="d"> · 别写模型默认就会做的事;知识型 skill 要给「反默认」的信息(官方例:避开 Inter 字体和紫色渐变)</span></div>
       <div class="ti done"><span class="k">建一个「踩坑提示」区(gotchas)</span><span class="b">前文已用</span><span class="d"> · 最高信号的内容,从模型实际踩的坑里反复累积</span></div>
       <div class="ti done"><span class="k">别把模型逼上铁轨(railroading)</span><span class="b">前文已用</span><span class="d"> · 给足信息,但留出适应当下情况的灵活度</span></div>
@@ -581,7 +581,7 @@ footer .sep{color:var(--faint);}
       <div class="ti"><span class="k">帮模型记忆</span><span class="d"> · 用日志 / JSON / SQLite 存历史,下次读自己的记录就知道变了什么</span></div>
       <div class="ti"><span class="k">存脚本、让它生成代码</span><span class="d"> · 把回合花在「编排下一步」,而不是重建样板</span></div>
       <div class="ti"><span class="k">按需钩子(hook)</span><span class="d"> · 只在该 skill 激活时生效的护栏,如临时拦 rm -rf、DROP TABLE</span></div>
-    </div>
+    </div></div></details>
   </div></div>
 </section>
 
