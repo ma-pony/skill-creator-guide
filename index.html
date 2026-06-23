@@ -189,6 +189,24 @@ footer .sep{color:var(--faint);}
 .dl.add{background:rgba(26,157,90,.10);color:#15743e;}
 .dl.del::before{content:"\2212";color:var(--red);}
 .dl.add::before{content:"+";color:var(--green);}
+/* —— 流程实操:录屏框 / 终端仿真 / 操作步骤 —— */
+.rec{max-width:var(--measure);margin:22px 0;border-radius:12px;overflow:hidden;border:1px solid var(--line);box-shadow:0 14px 44px rgba(20,30,50,.13);}
+.rec .bar,.term .bar{display:flex;align-items:center;gap:7px;padding:11px 15px;background:#16161e;}
+.rec .bar i,.term .bar i{width:11px;height:11px;border-radius:50%;display:block;}
+.rec .bar .r,.term .bar .r{background:#ff5f57;}.rec .bar .y,.term .bar .y{background:#febc2e;}.rec .bar .g,.term .bar .g{background:#28c840;}
+.rec .bar span,.term .bar span{margin-left:9px;font:600 12px/1 var(--mono);color:#8b95a7;}
+.rec img{display:block;width:100%;background:#1a1b26;}
+.reccap{font-size:14.5px;color:var(--muted);margin:10px 0 26px;padding-left:15px;border-left:2px solid var(--line);line-height:1.55;}
+.reccap b{color:var(--ink);}
+.term{max-width:var(--measure);margin:22px 0;border-radius:12px;overflow:hidden;border:1px solid #2a2c3d;box-shadow:0 14px 44px rgba(20,30,50,.13);}
+.term .body{background:#1a1b26;padding:18px 20px;font:500 13.5px/1.8 var(--mono);color:#a9b1d6;white-space:pre-wrap;overflow-wrap:anywhere;}
+.term .body .p{color:#7aa2f7;}.term .body .c{color:#9ece6a;}.term .body .o{color:#c0caf5;}.term .body .m{color:#565f89;}.term .body .a{color:#bb9af7;}
+.steps2{max-width:var(--measure);counter-reset:st;margin:22px 0;}
+.steps2 li{position:relative;padding:0 0 20px 46px;list-style:none;line-height:1.55;}
+.steps2 li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:-3px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;border-radius:9px;font:700 14px/1 var(--mono);}
+.steps2 li::after{content:"";position:absolute;left:14px;top:30px;bottom:0;width:2px;background:var(--line);}
+.steps2 li:last-child{padding-bottom:0;}.steps2 li:last-child::after{display:none;}
+.steps2 li b{color:var(--fg);}.steps2 li code{font-size:.82em;}
 </style>
 </head>
 <body>
@@ -197,8 +215,8 @@ footer .sep{color:var(--faint);}
   <div class="wrap">
     <span class="brand">用 <b>skill-creator</b> 创建与优化 skill</span>
     <div class="links">
-      <a href="#tune">手动调优</a>
-      <a href="#compare">带 / 不带对比</a>
+      <a href="#create">创建</a>
+      <a href="#tune">优化</a>
       <a href="#auto">自动进化</a>
       <a href="debug-playbook-review.html" class="ext" target="_blank" rel="noopener">原始 评测界面 ↗</a>
     </div>
@@ -207,9 +225,9 @@ footer .sep{color:var(--faint);}
 
 <header class="hero">
   <div class="wrap">
-    <p class="eyebrow">创建 · 调优 · 进化</p>
+    <p class="eyebrow">创建 · 优化 · 自进化 · 全程可复现</p>
     <h1>大多数人创建完 skill 就停了 ——<br>真正决定它有没有用的,是<em>后面两步</em></h1>
-    <p>现在用 skill-creator,几分钟就能生成一个 skill。但生成只是开始。真正拉开差距的是<strong>手动调优</strong>和<strong>自动进化</strong>,而这两步恰恰最多人没点开过。下面用一个真实例子走一遍。</p>
+    <p>现在用 skill-creator,几分钟就能生成一个 skill。但生成只是开始。真正拉开差距的是<strong>手动调优</strong>和<strong>自动进化</strong>,而这两步恰恰最多人没点开过。下面用一个真实例子,把<strong>创建 → 优化 → 自进化</strong>走一遍 —— 每一步都有可复现的命令、终端录屏和真实评测数据。</p>
     <div class="chips"><span class="chip">真实评测</span><span class="chip">原生 评测界面</span><span class="chip">无脱敏顾虑</span></div>
   </div>
 </header>
@@ -234,6 +252,7 @@ footer .sep{color:var(--faint);}
       <div class="it"><span class="num">9</span><span class="tx"><b>基础设施运维</b> · 带护栏的运维操作</span></div>
     </div>
     <div class="cite"><span class="lbl">ANTHROPIC 官方博客</span><p>「最好的 skill 干净地落在某一类;想做太多的会横跨几类、把智能体搞糊涂。」—— 单一职责,正是后面我们会反复碰到的主线。</p></div>
+    <div class="rec"><div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>terminal — 真实录屏</span></div><img src="assets/demo-create.gif" alt="查看创建出的 skill 产物" loading="lazy"></div><p class="reccap"><b>创建产物</b>:一个 skill 就是一个文件夹 + 一个 SKILL.md —— 开头 YAML 写 name 和触发描述,正文是给模型看的排查指令。</p>
   </div></div>
 </section>
 
@@ -241,7 +260,7 @@ footer .sep{color:var(--faint);}
   <div class="wrap">
     <div class="reading">
       <span class="tag">重点 · 很多人没点开过</span>
-      <h2>手动调优:给 skill 写测试,带 / 不带各跑一遍</h2>
+      <h2>优化:给 skill 写测试,带 / 不带各跑一遍</h2>
       <p>生成完别急着用。skill-creator 内置了一套<strong>评估驱动</strong>的调优流程:给 skill 写几个真实测试用例,每个用例跑两遍 —— 一遍带这个 skill、一遍不带作对照,自动打分,再生成页面让你逐个对比真实输出。</p>
       <p>我们拿一个真实例子贯穿全程:<code>debug-playbook</code> —— 一套「接口故障排查清单」的 skill。先看它<strong>初版(v1)</strong>的全文 —— 看着挺专业,问题就藏在最后那句「优先在这五类里定位」:</p>
     </div>
@@ -299,8 +318,10 @@ footer .sep{color:var(--faint);}
       <figcaption><b>skill-creator 跑完自动生成的 review 界面(原生页面)。</b>方向键翻 run、切 Outputs / Benchmark 标签;导航栏的「原始 review 界面」能打开可交互的完整版。</figcaption>
     </figure>
     <div class="reading">
+      <div class="rec"><div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>terminal — 真实录屏</span></div><img src="assets/demo-eval.gif" alt="运行评测脚本" loading="lazy"></div><p class="reccap"><b>带 / 不带各跑一遍</b>:<code>build_workspace.py</code> 把两组诊断评分 —— <b>带 skill 67%、不带 100%</b>。带了反而更低分,问题就藏在某个用例里。</p>
       <h3 id="compare">带 / 不带,左右一比就清楚</h3>
       <p>给它三个故障现象当测试用例。下面切换不同故障,左边是<strong>不带 skill</strong> 的诊断、右边是<strong>带 v1</strong> 的诊断 —— 同一个模型、同一个问题,差别一目了然。这些都是真实输出,没有改写。</p>
+      <div class="rec"><div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>terminal — 真实录屏</span></div><img src="assets/demo-diag.gif" alt="时区用例的诊断对比" loading="lazy"></div><p class="reccap"><b>时区用例的诊断对比</b>:不带 skill → 第一直觉就是时区(还点破「本地正常」是铁证);带 v1 → 被五步清单带去「先查缓存」。下面可切换其它故障自己看。</p>
     </div>
 
     <div class="compare">
@@ -410,6 +431,7 @@ footer .sep{color:var(--faint);}
       <h3>看到问题之后怎么改</h3>
       <p>在对比里看到被带偏,改法<strong>不是删掉 skill</strong>,而是给它一条边界:开头加一句方向判断,并写明「何时不要用」。下面就是改后的 <strong>v2 全文</strong>(和前面的 v1 比,核心只多了开头那段边界);改完用同一组用例重跑,看三个用例 <strong>改前(v1)对改后(v2)</strong> 的效果:</p>
       <div class="cite"><span class="lbl">和官方结论对上了 · 逼上铁轨</span><p>Claude Code 团队把「指令写得太具体、把模型逼上固定轨道」称作 <span class="term">「逼上铁轨」</span>(railroading),给的建议是「给模型需要的信息,但<strong>留出适应当下情况的灵活度</strong>」。我们这条边界 —— 不删清单、只补一句「何时不要用」—— 就是这个思路的落地。<a href="https://claude.com/blog/lessons-from-building-claude-code-how-we-use-skills" target="_blank" rel="noopener">原文 ↗</a></p></div>
+      <div class="rec"><div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>terminal — 真实录屏</span></div><img src="assets/demo-fix.gif" alt="v1 到 v2 的 git diff" loading="lazy"></div><p class="reccap"><b>v1 → v2 的真实改动</b>:<code>git diff</code> 一眼看清 —— 红色删掉「强制五步」,绿色加上「数据内容不对就先读代码」的边界,description 也一并收窄。</p>
     </div>
     <div class="viewer">
       <div class="head">
@@ -595,6 +617,13 @@ footer .sep{color:var(--faint);}
     </div>
     <div class="reading">
       <p>说白了,自动化就是把上面那步「人来改」换成「机器自己改」。先看它<strong>真能不能</strong>自己改 —— 把 v1 和它那次时区失败的记录丢给模型,让它自己诊断、自己提改进:</p>
+    <div class="term"><div class="bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>auto-evolve — 机器自己跑(示意)</span></div><div class="body"><span class="m"># 把那次失败记录喂给优化器,它自己迭代</span>
+<span class="c">$ evolve --skill debug-playbook --trace timezone-fail.log</span>
+<span class="o">▸ 读取失败</span> 时区用例:带 skill 把方向锚到了「缓存」
+<span class="a">reflect</span> 「『别假设是代码问题』那句,把时区挤出了首选方向」
+<span class="o">▸ 提议改动</span> description 加边界:数据内容不对 → 先读代码
+<span class="o">▸ 重测</span> 时区 ✓  编码 ✓  并发 ✓  分页 ✓  <span class="c">4/4 救回</span>
+<span class="m"># 结果和人手改出的 v2 几乎一致</span></div></div>
       <div style="background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 11px 11px 0;padding:18px 22px;margin:14px 0;">
         <p style="font:600 12px/1 var(--mono);color:var(--accent);margin:0 0 10px;">它的思考(真实推理,未改写)</p>
         <p style="margin:0;font-size:15px;line-height:1.66;color:var(--ink);">先抓到关键信号:<strong>不带 skill 答对、带了反而错</strong> → 问题出在 skill,不在模型。通读后定位两处元凶:① 五步清单里根本没有「时区」这一类,模型无处安放它;② 最后那句「不要假设是代码问题」,把时区这种环境配置问题也一起堵死了 —— 而「本地正常、线上异常」明明是环境差异的强信号,清单却没利用。</p>
